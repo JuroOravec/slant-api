@@ -1,0 +1,95 @@
+{
+  "name": "slant-api",
+  "version": "1.0.0",
+  "description": "Unofficial API for Slant.co",
+  "homepage": "https://github.com/JuroOravec/slant-api",
+  "repository": "github:JuroOravec/slant-api",
+  "bugs": "https://github.com/JuroOravec/slant-api/issues",
+  "author": {
+    "name": "Juro Oravec",
+    "email": "juraj.oravec.josefson@gmail.com"
+  },
+  "keywords": [
+    "api",
+    "client",
+    "slant",
+    "slant.co",
+    "javascript",
+    "typescript",
+    "python"
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "config": {
+    "chonky": {
+      "node": {
+        "version": "1.0.1"
+      }
+    }
+  },
+  "scripts": {
+    "build": "./node_modules/typescript/bin/tsc",
+    "watch": "./node_modules/typescript/bin/tsc --watch",
+    "test": "npm run test:cov",
+    "test:cov": "run-s test:jest codecov:upload",
+    "test:jest": "jest --config jestconfig.json --detectOpenHandles",
+    "codecov:upload": "dotenv bash scripts/upload_codecov.sh",
+    "format": "prettier --write 'src/**/*.{ts,js}'",
+    "format:check": "prettier --check 'src/**/*.{ts,js}'",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "lint:check": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "validate": "run-s test:jest lint:check format:check",
+    "clean": "shx rm -rf node_modules/ dist/",
+    "setup": "npm run build",
+    "typedoc:markdown": "typedoc --out ./docs/typedoc --mode file --excludeNotExported --exclude '**/__tests__/**/*' --tsconfig ./tsconfig.json --readme none --plugin typedoc-plugin-markdown ./src/",
+    "typedoc:html": "typedoc --out ./docs/typedoc --mode file --excludeNotExported --exclude '**/__tests__/**/*' --tsconfig ./tsconfig.json --readme none --plugin none ./src/",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@commitlint/travis-cli": "^8.3.5",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/github": "^7.0.6",
+    "@semantic-release/npm": "^7.0.5",
+    "@semantic-release/release-notes-generator": "^9.0.1",
+    "@types/jest": "^25.2.2",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
+    "all-contributors-cli": "^6.14.1",
+    "codecov": "^3.6.5",
+    "commitizen": "^4.0.4",
+    "dotenv-cli": "^3.1.0",
+    "env-ci": "^5.0.2",
+    "eslint": "^6.8.0",
+    "git-authors-cli": "^1.0.24",
+    "github-label-sync": "^1.6.0",
+    "inquirer": "^7.1.0",
+    "jest": "^25.3.0",
+    "js-yaml": "^3.13.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.0.4",
+    "semantic-release": "^17.0.4",
+    "semantic-release-changelog-update": "^1.1.8",
+    "semantic-release-cli": "^5.2.3",
+    "semantic-release-verify-deps": "^1.0.2",
+    "shx": "^0.3.2",
+    "standard-version": "^8.0.0",
+    "ts-jest": "^25.3.1",
+    "typedoc": "^0.17.4",
+    "typedoc-plugin-markdown": "^2.2.17",
+    "typescript": "^3.9.2"
+  },
+  "dependencies": {
+    "@types/debug": "^4.1.5",
+    "@types/read-pkg-up": "^6.0.0",
+    "debug": "^4.1.1",
+    "read-pkg-up": "^7.0.1"
+  }
+}
