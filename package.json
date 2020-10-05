@@ -89,7 +89,7 @@
   "dependencies": {
     "@types/debug": "^4.1.5",
     "@types/read-pkg-up": "^6.0.0",
-    "debug": "^4.1.1",
+    "debug": "^4.2.0",
     "read-pkg-up": "^7.0.1"
   }
 }
