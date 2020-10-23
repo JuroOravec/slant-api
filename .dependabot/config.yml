@@ -2,7 +2,7 @@
 version: 1
 update_configs:
   - package_manager: 'javascript'
-    directory: '/'
+    directory: '/packages/slant-api-js'
     update_schedule: 'daily'
     commit_message:
       prefix: 'fix'
