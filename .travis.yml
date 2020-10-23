@@ -10,9 +10,7 @@ branches:
 language: node_js
 node_js:
   - '10'
-  - '11'
   - '12'
-  - '13'
 
 before_install:
   # Configure signed git commits from within Travis CI, see:
