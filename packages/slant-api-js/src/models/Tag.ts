@@ -9,11 +9,11 @@ interface TagDataRaw {
   isCommunity: boolean;
   count: string;
   localId: string;
-};
+}
 
 interface TagData extends Omit<TagDataRaw, 'count'> {
   count: number;
-};
+}
 
 class Tag extends Model implements TagData {
   type: TagData['type'];
@@ -60,6 +60,6 @@ class Tag extends Model implements TagData {
       count: Number.parseInt(data.count),
     };
   }
-};
+}
 
 export { Tag, TagData, TagDataRaw };

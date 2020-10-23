@@ -2,6 +2,7 @@ import Ajv from 'ajv';
 // @ts-expect-error
 import generateSchema from 'generate-schema'
 import traverse from 'traverse';
+import jsonSchemaV4 from 'ajv/lib/refs/json-schema-draft-04.json';
 
 const compareBySchema = async (main: any, comparee: any) => {
   const expectedSchema = generateSchema.json(main);
@@ -14,7 +15,7 @@ const compareBySchema = async (main: any, comparee: any) => {
 
   // Add support for JSON schema v4, which is returned by 'generate-schema'
   const ajv = new Ajv({ schemaId: 'auto' });
-  ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
+  ajv.addMetaSchema(jsonSchemaV4);
 
   const valid = await ajv.validate(expectedSchema, comparee);
   const errors = ajv.errors ? [...ajv.errors] : [];
