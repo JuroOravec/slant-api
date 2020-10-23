@@ -42,6 +42,7 @@
     "format:check": "prettier --check 'src/**/*.{ts,js}'",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint:check": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "validate:style": "run-s lint:check format:check",
     "validate": "run-s test:unit lint:check format:check",
     "clean": "shx rm -rf node_modules/ dist/",
     "setup": "npm run build",

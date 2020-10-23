@@ -38,15 +38,11 @@ install:
 before_script:
   - npm run setup
 script:
-  - npm run validate
+  - npm run validate:style
+  - if [ "$TRAVIS_NODE_VERSION" = "12" ]; then npm run test:unit:cov; else npm run test:unit:cov; fi
 
 jobs:
   include:
-    - stage: codecov
-      node_js: lts/*
-      script:
-        - npm run test:cov
-
     - stage: update CHANGELOG.md
       if: type = pull_request
       node_js: lts/*
