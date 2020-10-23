@@ -17,14 +17,13 @@
 
 The first JS client for Slant.co API (unofficial)
 
-#### 🏠 [Homepage](https://github.com/JuroOravec/slant-api/tree/master/packages/slant-api-js/) |  🗃 [Repository](https://github.com/JuroOravec/slant-api/tree/master/packages/slant-api-js) | 📦 [NPM](https://www.npmjs.com/package/slant-api) | 📚 [Documentation](https://github.com/JuroOravec/slant-api/tree/master/packages/slant-api-js/docs)  | 🐛 [Issue Tracker](https://github.com/JuroOravec/slant-api/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) 
+#### 🏠 [Homepage](https://github.com/JuroOravec/slant-api/tree/master/packages/slant-api-js/) | 🗃 [Repository](https://github.com/JuroOravec/slant-api/tree/master/packages/slant-api-js) | 📦 [NPM](https://www.npmjs.com/package/slant-api) | 📚 [Documentation](https://github.com/JuroOravec/slant-api/tree/master/packages/slant-api-js/docs) | 🐛 [Issue Tracker](https://github.com/JuroOravec/slant-api/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 
 ## 🪑 Table of Content
 
-- [🧰 Features](#-features)  
+- [🧰 Features](#-features)
 - [👶 Install](#-install)
 - [🚀 Usage](#-usage)
-- [🔮 Background](#-background)
 - [🤖 API](#-api)
 - [⏳ Changelog](#-changelog)
 - [🛠 Developing](#-developing)
@@ -75,23 +74,6 @@ const slant = new Slant();
 // Get all tags
 const tags = await slant.tags();
 ```
-
-## 🔮 Background
-
-<!-- Core Technical Concepts/Inspiration
-
-- Potentially unfamiliar terms link to informative sources
-- Why does it exist?
-- Frame your project for the potential user.
-- Compare/contrast your project with other, similar projects so the user knows how it is different from those projects.
-- Highlight the technical concepts that your project demonstrates or supports. Keep it very brief.
-- Keep it useful.
-- Performs [cognitive funneling](https://github.com/noffle/art-of-readme#cognitive-funneling)
-- Caveats and limitations mentioned up-front
-
--->
-
-This project is a response to [this Reddit thread](https://www.reddit.com/r/SomebodyMakeThis/comments/iy51fy/smt_api_for_slantco/) on subreddit [/r/SomebodyMakeThis](https://www.reddit.com/r/SomebodyMakeThis/) where a user  [/u/smartmanoj](https://www.reddit.com/user/smartmanoj/) requested an API for [Slant.co](https://slant.co/).
 
 > ⚠️ NOTE: Slant.co does not provide an official client for interacting with the website programatically. As such, we cannot guarantee the client will work 100% of the time.
 >
