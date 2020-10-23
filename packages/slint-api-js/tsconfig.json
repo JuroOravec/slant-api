@@ -1,14 +1,23 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
-    "lib": ["es2017", "es7", "es6", "DOM", "ES5", "ESNext", "DOM.Iterable", "ScriptHost"],
+    "module": "esnext",
+    "lib": [
+      "es2017",
+      "es7",
+      "es6",
+      "DOM",
+      "ES5",
+      "ESNext",
+      "DOM.Iterable",
+      "ScriptHost"
+    ],
     "allowJs": true,
-    "checkJs": true,
     "declaration": true,
     "outDir": "dist",
     "removeComments": true,
     "downlevelIteration": true,
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "strict": true,
     "noImplicitAny": true,
@@ -22,6 +31,6 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["node_modules", "dist", "**/__tests__/**/*"],
+  "exclude": ["node_modules", "dist", "__mocks__"],
   "include": ["src/**/*"]
 }

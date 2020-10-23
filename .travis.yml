@@ -32,6 +32,7 @@ before_install:
   # Configure git to use your GPG key
   - git config --global user.signingkey ${GPG_KEY_ID}
 install:
+  - cd ./packages/slant-api-js
   - npm install
   # Remove installation side effects (like updated package-lock.json)
   - git reset --hard HEAD

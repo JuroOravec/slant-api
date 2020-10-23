@@ -15,8 +15,7 @@
     "slant",
     "slant.co",
     "javascript",
-    "typescript",
-    "python"
+    "typescript"
   ],
   "license": "MIT",
   "main": "dist/index.js",
@@ -34,15 +33,16 @@
   "scripts": {
     "build": "./node_modules/typescript/bin/tsc",
     "watch": "./node_modules/typescript/bin/tsc --watch",
-    "test": "npm run test:cov",
-    "test:cov": "run-s test:jest codecov:upload",
-    "test:jest": "jest --config jestconfig.json --detectOpenHandles",
+    "test": "npm run test:unit:cov",
+    "test:unit": "jest --config jestconfig.json --detectOpenHandles",
+    "test:unit:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js -w 1 --config jestconfig.json --detectOpenHandles",
+    "test:unit:cov": "run-s test:unit codecov:upload",
     "codecov:upload": "dotenv bash scripts/upload_codecov.sh",
     "format": "prettier --write 'src/**/*.{ts,js}'",
     "format:check": "prettier --check 'src/**/*.{ts,js}'",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint:check": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "validate": "run-s test:jest lint:check format:check",
+    "validate": "run-s test:unit lint:check format:check",
     "clean": "shx rm -rf node_modules/ dist/",
     "setup": "npm run build",
     "typedoc:markdown": "typedoc --out ./docs/typedoc --mode file --excludeNotExported --exclude '**/__tests__/**/*' --tsconfig ./tsconfig.json --readme none --plugin typedoc-plugin-markdown ./src/",
@@ -60,6 +60,7 @@
     "@semantic-release/npm": "^7.0.5",
     "@semantic-release/release-notes-generator": "^9.0.1",
     "@types/jest": "^25.2.2",
+    "@types/traverse": "^0.6.32",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "all-contributors-cli": "^6.14.1",
@@ -68,6 +69,7 @@
     "dotenv-cli": "^3.1.0",
     "env-ci": "^5.0.2",
     "eslint": "^6.8.0",
+    "generate-schema": "^2.6.0",
     "git-authors-cli": "^1.0.24",
     "github-label-sync": "^1.6.0",
     "inquirer": "^7.1.0",
@@ -81,15 +83,20 @@
     "semantic-release-verify-deps": "^1.0.2",
     "shx": "^0.3.2",
     "standard-version": "^8.0.0",
+    "traverse": "^0.6.6",
     "ts-jest": "^25.3.1",
     "typedoc": "^0.17.4",
     "typedoc-plugin-markdown": "^2.2.17",
-    "typescript": "^3.9.2"
+    "typescript": "^4.0.3"
   },
   "dependencies": {
     "@types/debug": "^4.1.5",
+    "@types/lodash": "^4.14.162",
     "@types/read-pkg-up": "^6.0.0",
+    "ajv": "^6.12.6",
+    "cross-fetch": "^3.0.6",
     "debug": "^4.1.1",
+    "lodash": "^4.17.20",
     "read-pkg-up": "^7.0.1"
   }
 }
