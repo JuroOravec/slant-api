@@ -35,6 +35,7 @@ install:
   # Remove installation side effects (like updated package-lock.json)
   - git reset --hard HEAD
 before_script:
+  - cd ./packages/slant-api-js
   - npm run setup
 script:
   - commitlint-travis
