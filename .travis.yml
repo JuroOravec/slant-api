@@ -8,9 +8,9 @@ branches:
     - /temp\/.*/
 
 language: node_js
+# Run tests for older supported node versions. Latest node version is tested in codecov stage
 node_js:
   - '10'
-  - '12'
 
 before_install:
   # Configure signed git commits from within Travis CI, see:
