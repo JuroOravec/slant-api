@@ -1,4 +1,5 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "es6",
     "module": "esnext",
@@ -12,6 +13,7 @@
       "DOM.Iterable",
       "ScriptHost"
     ],
+    "types": ["jest", "node"],
     "allowJs": true,
     "declaration": true,
     "outDir": "dist",
@@ -20,17 +22,19 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "strict": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "importHelpers": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
     "strictPropertyInitialization": true,
-    "noImplicitThis": true,
     "alwaysStrict": true,
     "noUnusedLocals": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true
   },
-  "exclude": ["node_modules", "dist", "__mocks__"],
-  "include": ["src/**/*"]
+  "exclude": ["node_modules", "**/dist", "**/__mocks__"]
 }

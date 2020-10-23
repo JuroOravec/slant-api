@@ -1,6 +1,6 @@
 import Ajv from 'ajv';
-// @ts-expect-error
-import generateSchema from 'generate-schema'
+// @ts-ignore
+import generateSchema from 'generate-schema';
 import traverse from 'traverse';
 import jsonSchemaV4 from 'ajv/lib/refs/json-schema-draft-04.json';
 
