@@ -27,9 +27,7 @@ class Tag extends Model implements TagData {
 
   constructor(data: Tag | TagDataRaw) {
     super();
-    const tagData = data instanceof Tag
-      ? data
-      : this.deserialize(data);
+    const tagData = data instanceof Tag ? data : this.deserialize(data);
 
     this.type = tagData.type;
     this.class = tagData.class;
