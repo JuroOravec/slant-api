@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "es6",
     "module": "esnext",
@@ -33,8 +32,7 @@
     "noUnusedLocals": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "node_modules",
