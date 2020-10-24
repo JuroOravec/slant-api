@@ -2,6 +2,8 @@
 tsconfig.json
 tslint.json
 **/__tests__/
+**/__mocks__/
 docs/
 coverage/
+config/
 temp/
