@@ -10,8 +10,8 @@ branches:
 language: node_js
 # Run tests for older supported node versions. Latest node version is tested in codecov stage
 node_js:
-  - '10'
-  - '12'
+  - "10"
+  - "12"
 
 before_install:
   # Configure signed git commits from within Travis CI, see:
@@ -50,7 +50,7 @@ jobs:
 
     - stage: release
       node_js: lts/*
-      script: ':' # noop, skips tests
+      script: ":" # noop, skips tests
       deploy:
         edge: true
         provider: script
@@ -69,7 +69,7 @@ env:
     # GH_TOKEN - semantic-release/github
     - secure: "LX3EzsYiCrkKROBfLk+5Qu1PqVlCIYET3XEKBr+vA9orjJtEkTTWOMdPRZ44nSVN0oVLcHPqHDfO3e6pb3kJ6Yp35YJdZQlCDa7Tt/NbvZWpTLWe/vlNE1XCMXS+yTU7Mq/iJ4wbVcddQxBPe7i3v6fCvDcOPrhl6m1f56Kd464Vu17JFFBabVQSZSiGNE5UGUD9Jmsqks/aVeQqjUHqUApRUDKqJB8ClEvZm/FDRR9Y0m9S29bQ/b9Gqa6wwadduAAer9PBohEccNvA50Fjk+o6gpF2gqYgSJPWIZVu6Uo1vq8S67eJlxhNHD3vgWJXAKbLgWlpHfQLwYktvy57eznOYKVQRS/z9NwaVHVZWtko58hKhSQRqYqD6XQ/heMlVwQNEU76VY81eDhX/5viaQfc/O3R42czFUDUwxzctYFKm15kpX352JPCKzPovCYfSdqsWpwin4Rcb32J9zzMyjddIkb/qbmLFeZplAVcGNrZgCmbYQV3jy/0845MS5ZZwz+HzizOd5jx2YSdFlMjIufrVe10M/vtaOZ/BPXsmgFE5EJbJ32rkIexvvFWh7qJFspkPBOTBKa5I1qJWwjVxlDFWJkUtoKQq4EaHJO4IuP9pR9E3Ck92EMjqDsDOCNEzS2FaaQFMArhoR5v0J6pRAib00oIi8gYX04pkTvPyMU="
     # NPM_TOKEN - semantic-release/npm
-    - secure: "p61IrUcWIMnblJgTLSpbaeB119cqmi0d1+V9O3PwzG0lqwlXdkxdcEm/MHz7m6zTyJ3gRs+367lPodKjJNO979orqaxCvePTACDXshXDpbuo2Tg5wE5QotIh0IFhwgE3Q4IKSv5pNZlAYXXHU+p7X+b45RJ1sgaUCh0vT19x9LprSaRY7gne6uw6YFhBf4VE1Xk/pFtVq0cRbzLXLOVw8WcJOJ89L+aRTUPqKV+mWqCTP1ePw0L11hDRHBr4lEpEoYCYaV7v7AraoOXefcNTGqW76vk6LOY0ygGlrpSsNYpTyuPoVkeeHyDGWEa53GjsTqL+xA5S+hdN3QaWKjB8FbgOwZU282+j+9oqNMQb31Z22FC5vKKOHrXDCs4Sh8JFu+m2Ynq7YkeOgJoehgqNLE6XkoQBR8L55daPo1W+80AucJNA42CizA78SmiPlVzOwqnN6NdK6b4vGeztdomB8SFTQw8ej1YCHaVQmH3CKO/B3dWtEz5xjFpD/bmb39nDGKAUaILxaQaZ0JqnCClYC6UG2hO3EJxGkUofxZ1dct46BDLjwfTp9vj6Pzku9gY4MmaW5eRKFIQDhlHL34ny6SNfORwJxhGWQqXK/BB9CHa6zo67o/RDNvzdE30gqlBsbYFIjA8l8d0WgfsvmAK2xOKScOr23iw4rLFZB0NB0+M="
+    - secure: "eDEo/CEizV40vhOe69pglfi4Qte5rTwOHD6wu+sYaUd3Zv3xlmeenMqzdtNpl0LRxBZHOz0cJGvopO9KaW+XSvgxwzQLWhxaEPj70i0sOWSAB9TGU0TZijhdnE6ZUgC/e9PTjb9OHwFuDBvSSREV4LiTWn4HNpcOkxrYUgGtAOWPvdRNt4o2UdSWBLzKX2hRF+/CCAs0X1TWH57FM4J7f2MJR9IUn/4iPWlpakPbHD3jcJEse1YVN6fOMNXSY0oPbviTriXQH4QaTL27D7Yxouge3oITmvUJtt7qg02GO2479rYOISk+Ns4sGi3dpXjV7M6TC6aRhbw6FSuRIFavk3kNia2/uW+Avcgn58RNP3BHqIHHhDD88sYU7Qm3hhu/KqgmjsrXa0PVfHrEWGpxxr1oyVljeccLKqR802mMfaRIMF2+hzW9KRM2TTMUEV6vRoVs+7ejGfO6LKDl+kxk/JYXCU9u7GoZp5iirZyqNJ8eBhH4VfKG1wzehri6iILOAJtYYi/9Vs1SPFVoyRsnbomsT9DeNNB8ft8x8OQsWG0hvlkP411Qg5zI7LXXK5XXjg5sCxi60FeP8rCY6jKVAM/NAHzCbssGXunK/BMpc32VehMgphStYTO0deatXZb9JDVxjnXr1Z4XK8N6ByJgzASd42cUE1j4uEoClW7rxGw="
     # GPG signature env vars
     # https://github.com/semantic-release/git/tree/905f113a577c55cd9bb0a37ea3504d9e8ee2dfa2#gpg-signature
     # GPG_PASSPHRASE
