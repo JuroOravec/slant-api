@@ -2,7 +2,7 @@
   "name": "slant-api",
   "version": "1.0.0",
   "description": "Unofficial API for Slant.co",
-  "homepage": "https://github.com/JuroOravec/slant-api",
+  "homepage": "https://github.com/JuroOravec/slant-api/tree/master/packages/slant-api-js/",
   "repository": "github:JuroOravec/slant-api",
   "bugs": "https://github.com/JuroOravec/slant-api/issues",
   "author": {
