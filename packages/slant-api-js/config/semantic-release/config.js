@@ -40,14 +40,14 @@ plugins.commitAnalyzer = {
       // Scope contains variation of README, also incl. dashed variations
       // (e.g. read-me)
       {
-        type: 'docs',
+        type: 'doc{s,}',
         scope: '*{README,{R,r}ead{-,}{M,m}e}*',
         release: 'patch',
       },
       // API docs change.
       // Scope contains variation of API
       {
-        type: 'docs',
+        type: 'doc{s,}',
         scope: '*{A,a}{P,p}{I,i}*',
         release: 'patch',
       },
@@ -55,7 +55,7 @@ plugins.commitAnalyzer = {
       // Scope contains variation of TypeDoc, also incl. dashed variations
       // (e.g. type-doc)
       {
-        type: 'docs',
+        type: 'doc{s,}',
         scope: '*{T,t}ype{-,}{D,d}oc*',
         release: 'patch',
       },
