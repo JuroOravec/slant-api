@@ -39,7 +39,9 @@
     "dist",
     "**/__mocks__/**/*",
     "coverage",
+    "config",
     "test",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "*.config.js"
   ]
 }
