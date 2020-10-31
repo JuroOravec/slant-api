@@ -1,0 +1,1770 @@
+#############
+# SUMMARY
+############
+
+- ✅ implemented endpoints - 1
+- ❌ rejected endpoints - 5
+- 🟠 scoped endpoints - 8
+- 🔸 to-scope endpoints - 0
+- ⏩ skipped endpoints - 33
+- untagged endpoints - 0
+
+Date: 2020-10-31
+
+#############
+# TODO
+############
+
+Following were not analysed:
+
+- USER endpoints
+- MUTATIONS
+
+#############
+# MODEL
+############
+
+#############
+# MODEL / QUERIES
+############
+
+  - [TAG]
+  - [USER]
+    |- META
+    |- IMAGE
+  - FEED (FRONT PAGE)
+  - SEARCH
+  - [TOPIC]
+  - [OPTION]
+
+  where
+
+  - TOPIC
+    |- [COMMENT]
+    |- [HISTORY]
+    |- [EVENT] (under ACTIVITY)
+    |- [OPTION]
+    |- VERSUS
+    |- [TAG]
+    |- [RELATED]
+
+  OPTION (Viewpoint)
+    |- [SPEC]
+    |- [SECTION] (== PROS AND CONS)
+    |- RECS
+    |- [VOTE]
+    |- [COMMENT]
+    |- [RELATED] (SAME AS TOPIC.RELATED)
+    |- [TAG]
+    |- [TOPIC]
+    |- [EVENT]
+
+  SECTION
+    |- [COMMENT]
+    |- [USER] (== contributors)
+    |- [EVENT]
+    |- [VOTE]
+    |- CONTEXT (== OPTION)
+
+  VOTE
+    |- [COMMENT]
+    |- USER
+    |- CONTEXT (== OPTION)
+
+  COMMENT (& HISTORY)
+    |- [COMMENT]
+    |- CONTEXT (== TOPIC)
+    |- [IMAGE]
+
+  ACTIVITY
+    |- [EVENT]
+    |- CONTEXT (== TOPIC)
+    |- PROPERTIES
+
+  EVENT
+    |- TARGET (maybe can be ANY?)
+    |- USER
+
+#############
+# MODEL / MUTATIONS
+############
+
+  - USER
+    - Create acc
+    - Login
+    - Logout
+  - TOPIC
+    - Add question
+    - Follow question
+    - Add option
+    - Add comment
+    - Edit question (and tags)
+  - OPTION
+    - upvote
+    - downvote
+    - edit option
+    - edit option specs
+    - add section (pro / con)
+    - add comment
+
+#############
+# ENDPOINTS
+############
+
+#############
+# ❌ AUTH
+############
+
+curl 'https://www.slant.co/userInfo?format=json' \
+  -H 'Cookie: connect.sid=s%3AWxhu-CWd78wOkTzF0ArLApqJuBwxWYct.Moqnw8Y5dkly6TL6guB3PgbU9iQhaSWFJ3i7H9KNlps;' \
+  --compressed
+
+- Not needed now
+
+#############
+# ❌ GEOLOCATION
+############
+
+curl 'https://www.slant.co/geolocation?format=json'
+
+- client-related
+- Not needed now
+
+#############
+# ❌ TEMPLATES
+############
+
+curl 'https://www.slant.co/templates?format=json'
+
+- client-related
+- Not needed now
+
+#######################
+# 🟠 TOPIC
+#######################
+
+- Topic = question
+- Each topic has options (suggestion / product)
+
+- https://www.slant.co/topics/{topic_id}~{topic_canonical_id}?format=json
+
+- search topics: /topics?page=1&filter=feed&tags=gaming,pc&format=json
+- searching for topics by single tag can be also done via /tags/gaming?format=json,
+    which translates to /topics?filter=recs&tags=gaming,offline. But pagination might be flaky,
+    so don't use that one.
+
+#######################
+# ❌ TOPIC / VERSUS (== COMPARE)
+#######################
+
+- curl 'https://www.slant.co/topics/113/versus/~a-list-apart_vs_ux-magazine_vs_interaction-design-foundation?format=json'
+- Not implemented because adds no new info.
+
+#######################
+# 🟠 TOPIC / COMMENTS
+#######################
+
+- https://www.slant.co/topics/{topic_id}/comments?format=json
+
+curl 'https://www.slant.co/topics/6674/comments?format=json'
+
+#######################
+# ⏩ TOPIC / COMMENTS / COMMENT
+#######################
+
+- https://www.slant.co/topics/{topic_id}/comments/{commendId}?format=json
+
+curl 'https://www.slant.co/topics/6674/comments?format=json'
+
+#######################
+# ⏩ TOPIC / COMMENTS / COMMENT / REACTION_SET
+#######################
+
+- https://www.slant.co/topics/{topic_id}/comments/{commendId}/react?format=json
+
+curl 'https://www.slant.co/topics/6674/comments/1/react?format=json'
+
+#######################
+# ⏩ TOPIC / COMMENTS / COMMENT / REACTION_SET / USEFUL
+#######################
+
+- https://www.slant.co/topics/{topic_id}/comments/{commendId}/react/useful?format=json
+
+curl 'https://www.slant.co/topics/6674/comments/1/react/useful?format=json'
+
+#######################
+# 🟠 TOPIC / HISTORY
+#######################
+
+- Revisions (editing changes)
+- Implemented using the Comment model
+
+- https://www.slant.co/topics/{topic_id}/history?format=json
+
+curl 'https://www.slant.co/topics/6674/history?format=json'
+
+#######################
+# 🟠 TOPIC / ACTIVITY
+#######################
+
+- https://www.slant.co/topics/{topic_id}/activity?format=json
+
+curl 'https://www.slant.co/topics/6674/activity?format=json'
+
+#######################
+# 🟠 TOPIC / RELATED
+#######################
+
+- Similar to /search, but returns related results instead of the direct match (possibly via keyword match)
+
+curl 'https://www.slant.co/related?query=What%20are%20the%20best%20Warhammer%20Fantasy%20games%20on%20Steam&format=json'
+
+#######################
+# ⏩ TOPIC / REACTION_SET
+#######################
+
+- https://www.slant.co/topics/{topic_id}/react?format=json
+
+curl 'https://www.slant.co/topics/6674/react?format=json'
+
+#######################
+# ⏩ TOPIC / REACTION_SET / DUPLICATE
+#######################
+
+- https://www.slant.co/topics/{topic_id}/react/duplicate?format=json
+
+curl 'https://www.slant.co/topics/6674/react/duplicate?format=json'
+
+#######################
+# ⏩ TOPIC / REACTION_SET / NOT_A_FIT
+#######################
+
+- https://www.slant.co/topics/{topic_id}/react/not-a-fit?format=json
+
+curl 'https://www.slant.co/topics/6674/react/not-a-fit?format=json'
+
+#######################
+# ⏩ TOPIC / REACTION_SET / NEEDS_IMPROVEMENT
+#######################
+
+- https://www.slant.co/topics/{topic_id}/react/needs-improvement?format=json
+
+curl 'https://www.slant.co/topics/6674/react/needs-improvement?format=json'
+
+#######################
+# ⏩ TOPIC / VOTES
+#######################
+
+- List of votes across all viewpoints
+- More details can be accessed via TOPIC / VIEWPOINTS / VIEWPOINT / VOTES
+
+curl 'https://www.slant.co/topics/6674/votes?format=json'
+
+#######################
+# 🟠 TOPIC / VIEWPOINTS
+#######################
+
+- Viewpoint = suggestion / product (Option) in the context of a topic / question
+
+'https://www.slant.co/topic/{topicId}/viewpoints?format=json'
+
+curl 'https://www.slant.co/topics/6674/viewpoints?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT
+#######################
+
+- Viewpoint = suggestion / product (Option) in the context of a topic / question
+- This endpoint provides more details than the parent
+
+'https://www.slant.co/topic/{topicId}/viewpoints/{viewpointId}/{topic_canonical_id}?format=json'
+
+curl 'https://www.slant.co/topics/6674/viewpoints/1?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / ACTIVITY
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/activity?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/2/activity?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / COMMENTS
+#######################
+
+'https://www.slant.co/topics/{topicId}/viewpoints/{viewpointId}/comments?format=json'
+
+curl 'https://www.slant.co/topics/113/viewpoints/1/comments?format=json'
+
+The 'context' in the data has TOPIC info
+
+Don't know if individual comments can be accessed further
+
+Data:
+{
+    URL: "/topics/113/viewpoints/1/comments"
+    children: [{
+        URL: "/topics/113/viewpoints/1/comments/3"
+        class: "Comment"
+        comments: {
+            children: []
+            class: "CommentList"
+            count: 0
+            latestThreadTime: "2014-03-31T15:32:22.000Z"
+            localID: "1pymwOmaCommentList@Comment:113-1-33"
+            type: "List"
+            uuid: "CommentList@Comment:113-1-3"
+        }
+        id: 3
+        localID: "1pymwOmaComment:113-1-32"
+        reactionSet: {
+            URL: "/topics/113/viewpoints/1/comments/3/react"
+            class: "ReactionSet"
+            localID: "1pymwOma/topics/113/viewpoints/1/comments/3/react11"
+            type: "Model"
+            useful: {
+                URL: "/topics/113/viewpoints/1/comments/3/react/useful"
+                class: "ReactionList"
+                count: 0
+                localID: "1pymwOma/topics/113/viewpoints/1/comments/3/react/useful12"
+                type: "List"
+                uuid: "/topics/113/viewpoints/1/comments/3/react/useful"
+            }
+            uuid: "/topics/113/viewpoints/1/comments/3/react"
+        }
+        revision: {
+            class: "Revision"
+            images: {
+                URL: null
+                children: [{
+                    class: "Image"
+                    hosted: "https://ucarecdn.com/871caf27-5af1-44c4-874a-dbe59c969149/"
+                    id: "dc46c1ff930479e40a1af1aa6798b747"
+                    localID: "1pymwOmaImage:338116"
+                    source: "http://i.imgur.com/leqzx7L.jpg"
+                    type: "Model"
+                    uuid: "Image:33811"
+                }]
+                class: "ImageList"
+                count: 1
+                localID: "1pymwOmaImageList@355e60a3-f4fb-5e6e-a090-33575d60ab775"
+                type: "List"
+                uuid: "ImageList@355e60a3-f4fb-5e6e-a090-33575d60ab77"
+            }
+            localID: "1pymwOmaRevision:338384"
+            parent: {
+                class: "Revision"
+                images: {
+                    URL: null
+                    children: [{
+                        class: "Image"
+                        hosted: "https://ucarecdn.com/871caf27-5af1-44c4-874a-dbe59c969149/"
+                        id: "dc46c1ff930479e40a1af1aa6798b747"
+                        localID: "1pymwOmaImage:338119"
+                        source: "http://i.imgur.com/leqzx7L.jpg"
+                        type: "Model"
+                        uuid: "Image:33811"
+                    }]
+                    class: "ImageList"
+                    count: 1
+                    localID: "1pymwOmaImageList@832f000f-783a-54ff-9c80-896a0e5c90ed8"
+                    type: "List"
+                    uuid: "ImageList@832f000f-783a-54ff-9c80-896a0e5c90ed"
+                }
+                localID: "1pymwOmaRevision:338107"
+                price: ""
+                siteURL: "http://alistapart.com/"
+                text: "Especially - User Science Section"
+                title: "A List Apart "
+                type: "Model"
+                uuid: "Revision:33810"
+            }
+            price: ""
+            siteURL: "http://alistapart.com/"
+            text: "List Apart explores the design, development, and meaning of web content, with a special focus on web standards and best practices.↵↵Specifically the User Science Section is an excellent resource for UX."
+            title: "A List Apart "
+            type: "Model"
+            uuid: "Revision:33838"
+        }
+        text: ""
+        timeCreated: "Mon, 31 Mar 2014 15:32:22 GMT"
+        type: "Model"
+        user: {
+            URL: "/users/ntesla"
+            anonymous: false
+            bio: ""
+            class: "User"
+            created: "Fri, 28 Mar 2014 09:37:09 GMT"
+            displayName: "ntesla"
+            image: {
+                large: "https://avatars.slant.co/identicons/0463ae25-0cda-5837-b5b4-ebd88f04820f"
+                small: "https://avatars.slant.co/identicons/0463ae25-0cda-5837-b5b4-ebd88f04820f"
+                source: "https://avatars.slant.co/identicons/0463ae25-0cda-5837-b5b4-ebd88f04820f"
+            }
+            localID: "1pymwOmaUser:0463ae25-0cda-5837-b5b4-ebd88f04820f10"
+            type: "Model"
+            username: "ntesla"
+            uuid: "User:0463ae25-0cda-5837-b5b4-ebd88f04820f"
+        }
+        uuid: "Comment:113-1-3"
+    }]
+    class: "CommentList"
+    "type": "Model",
+    "class": "Viewpoint",
+    "id": 1,
+    "uuid": "113-1",
+    "URL": "/topics/113/viewpoints/1/~best-user-experience-ux-focused-blogs~a-list-apart",
+    "revision": {
+        "type": "Model",
+        "class": "Revision",
+        "uuid": "Revision:33838",
+        "title": "A List Apart ",
+        "text": "List Apart explores the design, development, and meaning of web content, with a special focus on web standards and best practices.\n\nSpecifically the User Science Section is an excellent resource for UX.",
+        "siteURL": "http://alistapart.com/",
+        "price": "",
+        "images": {
+            "type": "List",
+            "class": "ImageList",
+            "uuid": "ImageList@355e60a3-f4fb-5e6e-a090-33575d60ab77",
+            "URL": null,
+            "count": 1,
+            "children": [
+                {
+                    "type": "Model",
+                    "class": "Image",
+                    "uuid": "Image:33811",
+                    "source": "http://i.imgur.com/leqzx7L.jpg",
+                    "hosted": "https://ucarecdn.com/871caf27-5af1-44c4-874a-dbe59c969149/",
+                    "id": "dc46c1ff930479e40a1af1aa6798b747",
+                    "localID": "1pymwOmaImage:3381135"
+                }
+            ],
+            "localID": "1pymwOmaImageList@355e60a3-f4fb-5e6e-a090-33575d60ab7734"
+        },
+        "localID": "1pymwOmaRevision:3383833"
+    },
+    "context": {
+        "type": "Model",
+        "class": "Topic",
+        "id": 113,
+        "uuid": "113",
+        "URL": "/topics/113/~best-user-experience-ux-focused-blogs",
+        "featured": null,
+        "compareURL": "/topics/113/versus/~a-list-apart_vs_ux-magazine_vs_interaction-design-foundation",
+        "communityURL": "/topics/113/~best-user-experience-ux-focused-blogs",
+        "tags": {
+            "type": "List",
+            "class": "TagList",
+            "uuid": "TagList@f7a08edc-f2a4-5c7c-a51c-3ad2b5a30174",
+            "URL": null,
+            "count": 3,
+            "children": [{
+                "type": "Model",
+                "class": "Tag",
+                "uuid": "Tag:development",
+                "id": "development",
+                "name": "Development",
+                "localID": "1pymwOmaTag:development38"
+            }],
+            "localID": "1pymwOmaTagList@f7a08edc-f2a4-5c7c-a51c-3ad2b5a3017437"
+        },
+        "auto_tags": {
+            "type": "List",
+            "class": "TagList",
+            "uuid": "TagList@f7a08edc-f2a4-5c7c-a51c-3ad2b5a30174",
+            "URL": null,
+            "count": 5,
+            "children": [{
+                "type": "Model",
+                "class": "Tag",
+                "uuid": "Tag:ux",
+                "id": "ux",
+                "name": "UX",
+                "localID": "1pymwOmaTag:ux42"
+            }],
+            "localID": "1pymwOmaTagList@f7a08edc-f2a4-5c7c-a51c-3ad2b5a3017441"
+        },
+        "revision": {
+            "type": "Model",
+            "class": "Revision",
+            "uuid": "Revision:33830",
+            "title": "What are the best user experience (UX) focused blogs?",
+            "text": "",
+            "siteURL": "",
+            "price": "",
+            "images": {
+                "type": "List",
+                "class": "ImageList",
+                "uuid": "ImageList@f374879d-0293-58ed-8068-32ef707e5c21",
+                "URL": null,
+                "count": 0,
+                "children": [],
+                "localID": "1pymwOmaImageList@f374879d-0293-58ed-8068-32ef707e5c2148"
+            },
+            "localID": "1pymwOmaRevision:3383047"
+        },
+        "noindex": true,
+        "viewpoints": {
+            "type": "List",
+            "class": "ViewpointList",
+            "uuid": "/topics/113/viewpoints",
+            "URL": "/topics/113/viewpoints",
+            "count": 10,
+            "localID": "1pymwOma/topics/113/viewpoints49"
+        },
+        "reactionSet": {
+            "type": "Model",
+            "class": "ReactionSet",
+            "uuid": "/topics/113/react",
+            "URL": "/topics/113/react",
+            "duplicate": {
+                "type": "List",
+                "class": "ReactionList",
+                "uuid": "/topics/113/react/duplicate",
+                "URL": "/topics/113/react/duplicate",
+                "count": 0,
+                "localID": "1pymwOma/topics/113/react/duplicate51"
+            },
+            "needsImprovement": {
+                "type": "List",
+                "class": "ReactionList",
+                "uuid": "/topics/113/react/needs-improvement",
+                "URL": "/topics/113/react/needs-improvement",
+                "count": 0,
+                "localID": "1pymwOma/topics/113/react/needs-improvement52"
+            },
+            "notAFit": {
+                "type": "List",
+                "class": "ReactionList",
+                "uuid": "/topics/113/react/not-a-fit",
+                "URL": "/topics/113/react/not-a-fit",
+                "count": 0,
+                "localID": "1pymwOma/topics/113/react/not-a-fit53"
+            },
+            "localID": "1pymwOma/topics/113/react50"
+        },
+        "localID": "1pymwOma11336"
+    "localID": "1pymwOma113-132"
+    }
+    count: 0
+    localID: "1pymwOma/topics/113/viewpoints/1/comments1"
+    type: "List"
+    uuid: "/topics/113/viewpoints/1/comments"
+}
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / REACTION_SET
+#######################
+
+'https://www.slant.co/topics/{topicId}/viewpoints/{viewpointId}/react?format=json'
+
+curl 'https://www.slant.co/topics/113/viewpoints/1/react?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / REACTION_SET / DOWNVOTE
+#######################
+
+'https://www.slant.co/topics/{topicId}/viewpoints/{viewpointId}/react/downvote?format=json'
+
+curl 'https://www.slant.co/topics/113/viewpoints/1/react/downvote?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / REACTION_SET / UPVOTE
+#######################
+
+'https://www.slant.co/topics/{topicId}/viewpoints/{viewpointId}/react/upvote?format=json'
+
+curl 'https://www.slant.co/topics/113/viewpoints/1/react/upvote?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / REACTION_SET / FLAG
+#######################
+
+'https://www.slant.co/topics/{topicId}/viewpoints/{viewpointId}/react/flag?format=json'
+
+curl 'https://www.slant.co/topics/113/viewpoints/1/react/flag?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / REACTION_SET / OUT_OF_DATE
+#######################
+
+'https://www.slant.co/topics/{topicId}/viewpoints/{viewpointId}/react/out-of-date?format=json'
+
+curl 'https://www.slant.co/topics/113/viewpoints/1/react/out-of-date?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / SECTIONS
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/sections?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/2/sections?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / SECTIONS / SECTION
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/sections/{sectionId}?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/2/sections/5?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / SECTIONS / SECTION / ACTIVITY
+#######################
+
+- Events of that section
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/sections/{sectionId}/activity?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/2/sections/5/activity?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / SECTIONS / SECTION / COMMENTS
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/sections/{sectionId}/comments?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/2/sections/5/comments?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / SECTIONS / SECTION / COMMENTS / COMMENT
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/sections/{sectionId}/comments?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/2/sections/5/comments?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / SECTIONS / SECTION / HISTORY
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/sections/{sectionId}/history?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/2/sections/5/history?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / SECTIONS / SECTION / REACTION_SET
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/sections/{sectionId}/react?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/2/sections/5/react?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / SECTIONS / SECTION / REACTION_SET / DOWNVOTE
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/sections/{sectionId}/react/downvote?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/2/sections/5/react/downvote?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / SECTIONS / SECTION / REACTION_SET / FLAG
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/sections/{sectionId}/react/flag?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/2/sections/5/react/flag?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / SECTIONS / SECTION / VOTES
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/votes?format=json
+
+Don't know if we can go any deeper
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / VOTES
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/votes?format=json
+
+Data:
+{
+    "featuredRecsCount": 0,
+    "type": "List",
+    "class": "ViewpointVoteList",
+    "uuid": "/topics/6674/viewpoints/2/votes",
+    "URL": "/topics/6674/viewpoints/2/votes",
+    "children": [{
+        "type": "Model",
+        "class": "ViewpointVote",
+        "uuid": "/topics/6674/viewpoints/2/votes/slimothy",
+        "URL": "/topics/6674/viewpoints/2/votes/slimothy",
+        "viewpointID": 2,
+        "option_id": "1b5af5ab-e6b4-510d-a782-706324804f68",
+        "rec_id": "2909052d-3ff5-5883-af38-227b398f4d45",
+        "text": "",
+        "delta": 1,
+        "favorite": false,
+        "created": "Mon, 03 Oct 2016 14:38:06 GMT",
+        "lastUpdated": "Mon, 03 Oct 2016 14:38:06 GMT",
+        "reactionSet": {
+            "type": "Model",
+            "class": "ReactionSet",
+            "uuid": "/topics/6674/viewpoints/2/votes/slimothy/react",
+            "URL": "/topics/6674/viewpoints/2/votes/slimothy/react",
+            "useful": {
+                "type": "List",
+                "class": "ReactionList",
+                "uuid": "/topics/6674/viewpoints/2/votes/slimothy/react/useful",
+                "URL": "/topics/6674/viewpoints/2/votes/slimothy/react/useful",
+                "count": 0,
+                "localID": "ChrRfW6Y/topics/6674/viewpoints/2/votes/slimothy/react/useful34"
+            },
+            "localID": "ChrRfW6Y/topics/6674/viewpoints/2/votes/slimothy/react33"
+        },
+        "comments": {
+            "type": "List",
+            "class": "CommentList",
+            "uuid": "/topics/6674/viewpoints/2/votes/slimothy/comments",
+            "URL": "/topics/6674/viewpoints/2/votes/slimothy/comments",
+            "count": 0,
+            "localID": "ChrRfW6Y/topics/6674/viewpoints/2/votes/slimothy/comments35"
+        },
+        "user": {
+            "type": "Model",
+            "class": "User",
+            "uuid": "User:2619257d-d213-5ed2-8249-651f087168a1",
+            "URL": "/users/slimothy",
+            "bio": "",
+            "username": "slimothy",
+            "displayName": "Slimothy",
+            "created": "Wed, 12 Mar 2014 13:34:19 GMT",
+            "anonymous": false,
+            "image": {
+                "source": "https://ucarecdn.com/66d11fb1-d3db-4f81-a3e5-ce723b78ff8d/",
+                "large": "https://ucarecdn.com/66d11fb1-d3db-4f81-a3e5-ce723b78ff8d/",
+                "small": "https://ucarecdn.com/66d11fb1-d3db-4f81-a3e5-ce723b78ff8d/"
+            },
+            "testimonial_karma": 1658310,
+            "testimonial_recs": 2904,
+            "localID": "ChrRfW6YUser:2619257d-d213-5ed2-8249-651f087168a136"
+        },
+        "context": {
+            "type": "Model",
+            "class": "Viewpoint",
+            "id": 2,
+            "uuid": "6674-2",
+            "URL": "/topics/6674/viewpoints/2/~warhammer-fantasy-games-on-steam~total-war-warhammer",
+            "revision": {
+                "type": "Model",
+                "class": "Revision",
+                "uuid": "Revision:695915",
+                "title": "Total War: Warhammer",
+                "text": "Total War: Warhammer is a turn based strategy game with empire building and real time aspects. The game is set in the Warhammer fantasy world featuring heroes monsters and magical creatures.",
+                "siteURL": "http://store.steampowered.com/app/364360/",
+                "price": "$59.99",
+                "images": {
+                    "type": "List",
+                    "class": "ImageList",
+                    "uuid": "ImageList@55df9805-b8ad-5140-813d-7a82eb6a80c3",
+                    "URL": null,
+                    "count": 5,
+                    "children": [{
+                        "type": "Model",
+                        "class": "Image",
+                        "uuid": "Image:499113",
+                        "source": "https://steamcommunity.com/linkfilter/?url=http://cdn.akamai.steamstatic.com/steam/apps/364360/ss_2bac98669658d79d19bffa1b4ce3fddb0f96e132.1920x1080.jpg?t=1464120279",
+                        "hosted": "https://ucarecdn.com/efe05039-a47d-426d-84ee-895958944dbc/",
+                        "id": "fbe0d53f76bd6b50d18f582a37ce455d",
+                        "localID": "ChrRfW6YImage:49911340"
+                    }],
+                    "localID": "ChrRfW6YImageList@55df9805-b8ad-5140-813d-7a82eb6a80c339"
+                },
+                "localID": "ChrRfW6YRevision:69591538"
+            },
+            "votes": {
+                "type": "List",
+                "class": "ViewpointVoteList",
+                "uuid": "/topics/6674/viewpoints/2/votes",
+                "URL": "/topics/6674/viewpoints/2/votes",
+                "delta": 1,
+                "text": "",
+                "favorite": false,
+                "created": "Mon, 03 Oct 2016 14:38:06 GMT",
+                "lastUpdated": "Mon, 03 Oct 2016 14:38:06 GMT",
+                "localID": "ChrRfW6Y/topics/6674/viewpoints/2/votes45"
+            },
+            "sections": {
+                "type": "List",
+                "class": "SectionList",
+                "URL": "/topics/6674/viewpoints/2/sections",
+                "uuid": "/topics/6674/viewpoints/2/sections",
+                "children": [{
+                    "type": "Model",
+                    "class": "Section",
+                    "id": 1,
+                    "uuid": "6674-2-1",
+                    "URL": "/topics/6674/viewpoints/2/sections/1/~",
+                    "isPending": false,
+                    "isCon": true,
+                    "revision": {
+                        "type": "Model",
+                        "class": "Revision",
+                        "uuid": "Revision:695917",
+                        "title": "Only four factions are available in the base game",
+                        "text": "There are only four factions are available without DLCs (The Empire, Vampire Counts, Greenskins and Dwarfes). Other playable races and factions are currently being released periodically as DLCs.",
+                        "siteURL": "",
+                        "price": "",
+                        "images": {
+                            "type": "List",
+                            "class": "ImageList",
+                            "uuid": "ImageList@5298bc0b-3a9d-5cec-9dc5-91a0fd53a6ca",
+                            "URL": null,
+                            "count": 0,
+                            "children": [],
+                            "localID": "ChrRfW6YImageList@5298bc0b-3a9d-5cec-9dc5-91a0fd53a6ca49"
+                        },
+                        "localID": "ChrRfW6YRevision:69591748"
+                    },
+                    "loc": [
+                        6674,
+                        2
+                    ],
+                    "votes": {
+                        "type": "List",
+                        "class": "SPVoteList",
+                        "uuid": "/topics/6674/viewpoints/2/sections/1/votes",
+                        "URL": "/topics/6674/viewpoints/2/sections/1/votes",
+                        "delta": 1,
+                        "localID": "ChrRfW6Y/topics/6674/viewpoints/2/sections/1/votes50"
+                    },
+                    "localID": "ChrRfW6Y6674-2-147"
+                }],
+                "localID": "ChrRfW6Y/topics/6674/viewpoints/2/sections46"
+            },
+            "localID": "ChrRfW6Y6674-237"
+        },
+        "localID": "ChrRfW6Y/topics/6674/viewpoints/2/votes/slimothy32"
+    }],
+    "count": 3,
+    "localID": "ChrRfW6Y/topics/6674/viewpoints/2/votes1"
+}
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / VOTES / USER_ID
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/votes/{userId}?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/4/votes/KristapsFeldmanis?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / VOTES / USER_ID / REACTION_SET
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/votes/{userId}/react?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/4/votes/KristapsFeldmanis/react?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / VOTES / USER_ID / REACTION_SET / USEFUL
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/votes/{userId}/react/useful?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/4/votes/KristapsFeldmanis/react/useful?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / VOTES / USER_ID / COMMENTS
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/votes/{userId}/comments?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/4/votes/KristapsFeldmanis/comments?format=json'
+
+#######################
+# ⏩ TOPIC / VIEWPOINTS / VIEWPOINT / VOTES / USER_ID / COMMENTS / COMMENT
+#######################
+
+https://www.slant.co/topics/{topic_id}/viewpoints/{viewpointID}/votes/{userId}/comments/{commentId}?format=json
+
+curl 'https://www.slant.co/topics/6674/viewpoints/4/votes/KristapsFeldmanis/comments/1?format=json'
+
+#######################
+# ⏩ OPTION
+#######################
+
+- Option = suggestion / product NOT in the context of any topic / question
+- Each option has specs, pros, cons, recs, comments
+
+'https://www.slant.co/options/{optionId}/~{canonicalOptionId}?format=json'
+
+curl 'https://www.slant.co/options/25907/~warhammer-vermintide-2-review?format=json'
+
+Pros and Cons are together in 'source.sections'
+
+This endpoint contains some info that is NOT included when the data is accessed
+as a Viewpoint (/topics/{topic_id}/viewpoints/{viewpointID}).
+
+Data:
+{
+    "type": "Model",
+    "class": "MasterOption",
+    "URL": "/options/25907/~warhammer-vermintide-2-review",
+    "canonicalURL": "/improve/options/25907/~warhammer-vermintide-2-review",
+    "id": 25907,
+    "uuid": "o-25907",
+    "source": {
+        "id": 63,
+        "URL": "/topics/6322/viewpoints/63/~action-games-on-steam~warhammer-vermintide-2",
+        "type": "Model",
+        "uuid": "6322-63",
+        "class": "Viewpoint",
+        "revision": {
+            "text": "Warhammer: Vermintide 2 is a first-person action, set in the grim dark Warhammer universe. You play as one of the 5 heroes to exterminate the agents of Chaos and the endless swarms of the rat-like Skaven. ",
+            "type": "Model",
+            "uuid": "Revision:2212993",
+            "class": "Revision",
+            "price": "$29.99",
+            "title": "Warhammer: Vermintide 2",
+            "images": {
+                "URL": null,
+                "type": "List",
+                "uuid": "ImageList@b99c129e-3010-5df6-96b0-a1dfe300b2dd",
+                "class": "ImageList",
+                "count": 3,
+                "children": [{
+                    "id": "61abcc0ab18533ae2ab7b062143672f6",
+                    "type": "Model",
+                    "uuid": "Image:2135694",
+                    "class": "Image",
+                    "hosted": "https://ucarecdn.com/82241939-de0a-42c8-9041-b2c9425ffcd3/",
+                    "source": "https://www.youtube.com/watch?v=JTlpd3O6-gE",
+                    "localID": "rLGvzDhbImage:21356945"
+                }],
+                "localID": "rLGvzDhbImageList@b99c129e-3010-5df6-96b0-a1dfe300b2dd4"
+            },
+            "siteURL": "http://store.steampowered.com/app/552500/Warhammer_Vermintide_2/",
+            "localID": "rLGvzDhbRevision:22129933"
+        },
+        "events": {
+            "type": "List",
+            "class": "EventList",
+            "uuid": "/topics/6322/viewpoints/63/activity",
+            "URL": "/topics/6322/viewpoints/63/activity",
+            "children": [
+                {
+                    "time": "Thu, 26 Apr 2018 15:27:36 GMT",
+                    "type": "Model",
+                    "user": {
+                        "URL": "/users/Yoshiyuki",
+                        "bio": "I'm a fiction novelist and a gamer, interested in unique, compelling stories that push boundaries.",
+                        "type": "Model",
+                        "uuid": "User:4005d870-265f-519c-8722-5e1a9f8dfadc",
+                        "class": "User",
+                        "image": {
+                            "large": "https://ucarecdn.com/141d2ef3-c347-4cb2-9137-2455f36acdd2/",
+                            "small": "https://ucarecdn.com/141d2ef3-c347-4cb2-9137-2455f36acdd2/",
+                            "source": "https://ucarecdn.com/141d2ef3-c347-4cb2-9137-2455f36acdd2/"
+                        },
+                        "created": "Thu, 25 Jan 2018 16:45:30 GMT",
+                        "username": "Yoshiyuki",
+                        "anonymous": false,
+                        "displayName": "Yoshiyuki",
+                        "localID": "rLGvzDhbUser:4005d870-265f-519c-8722-5e1a9f8dfadc10"
+                    },
+                    "uuid": "Event:809935",
+                    "class": "Event",
+                    "action": "Sec.Revise",
+                    "target": {
+                        "id": 11,
+                        "URL": "/topics/6322/viewpoints/63/sections/11/~",
+                        "loc": [
+                            6322,
+                            63
+                        ],
+                        "type": "Model",
+                        "uuid": "6322-63-11",
+                        "class": "Section",
+                        "isCon": false,
+                        "revision": {
+                            "text": "Weapons have their own stats and special bonuses like critical strike based on what random stats your loot happened to roll, but what's especially interesting is the weapon type themselves vary in their physical combat capabilities like speed, damage, and swing arc. For example, swords have a wider swing arc than maces, making them better for taking out large groups of monsters. Daggers are quick and require timing to use properly. Spears are slow but have a huge arc and can knock down enemies. This adds a strategic element to play as you'll have to choose the right weapon to get the job done. ",
+                            "type": "Model",
+                            "uuid": "Revision:2248382",
+                            "class": "Revision",
+                            "price": "",
+                            "title": "Weapon choice actually matters with each weapon type providing its own playstyle",
+                            "images": {
+                                "URL": null,
+                                "type": "List",
+                                "uuid": "ImageList@82a9062f-66fc-5ae7-bdb3-c2fee28b91dd",
+                                "class": "ImageList",
+                                "count": 0,
+                                "children": [],
+                                "localID": "rLGvzDhbImageList@82a9062f-66fc-5ae7-bdb3-c2fee28b91dd13"
+                            },
+                            "siteURL": "",
+                            "localID": "rLGvzDhbRevision:224838212"
+                        },
+                        "isPending": false,
+                        "context": {
+                            "id": 63,
+                            "URL": "/topics/6322/viewpoints/63/~action-games-on-steam~warhammer-vermintide-2",
+                            "type": "Model",
+                            "uuid": "6322-63",
+                            "class": "Viewpoint",
+                            "revision": {
+                                "text": "Warhammer: Vermintide 2 is a first-person action, set in the grim dark Warhammer universe. You play as one of the 5 heroes to exterminate the agents of Chaos and the endless swarms of the rat-like Skaven. ",
+                                "type": "Model",
+                                "uuid": "Revision:2212993",
+                                "class": "Revision",
+                                "price": "$29.99",
+                                "title": "Warhammer: Vermintide 2",
+                                "images": {
+                                    "URL": null,
+                                    "type": "List",
+                                    "uuid": "ImageList@b99c129e-3010-5df6-96b0-a1dfe300b2dd",
+                                    "class": "ImageList",
+                                    "count": 3,
+                                    "children": [{
+                                        "id": "61abcc0ab18533ae2ab7b062143672f6",
+                                        "type": "Model",
+                                        "uuid": "Image:2135694",
+                                        "class": "Image",
+                                        "hosted": "https://ucarecdn.com/82241939-de0a-42c8-9041-b2c9425ffcd3/",
+                                        "source": "https://www.youtube.com/watch?v=JTlpd3O6-gE",
+                                        "localID": "rLGvzDhbImage:213569417"
+                                    }],
+                                    "localID": "rLGvzDhbImageList@b99c129e-3010-5df6-96b0-a1dfe300b2dd16"
+                                },
+                                "siteURL": "http://store.steampowered.com/app/552500/Warhammer_Vermintide_2/",
+                                "localID": "rLGvzDhbRevision:221299315"
+                            },
+                            "context": {
+                                "id": 6322,
+                                "URL": "/topics/6322/~action-games-on-steam",
+                                "tags": {
+                                    "URL": null,
+                                    "type": "List",
+                                    "uuid": "TagList@49f85cad-f400-5d81-bc6a-9d20b3cbf38d",
+                                    "class": "TagList",
+                                    "count": 3,
+                                    "children": [{
+                                        "id": "gaming",
+                                        "name": "Gaming",
+                                        "type": "Model",
+                                        "uuid": "Tag:gaming",
+                                        "class": "Tag",
+                                        "localID": "rLGvzDhbTag:gaming22"
+                                    }],
+                                    "localID": "rLGvzDhbTagList@49f85cad-f400-5d81-bc6a-9d20b3cbf38d21"
+                                },
+                                "type": "Model",
+                                "uuid": "6322",
+                                "class": "Topic",
+                                "noindex": false,
+                                "featured": null,
+                                "revision": {
+                                    "text": "Action games are typically characterized by tests of physical skills. They primarily challenge the player's reaction time and hand-eye coordination requiring you to be make decisions quickly and perform them precisely.\n\nThis question is limited to those action games that are available on Steam.",
+                                    "type": "Model",
+                                    "uuid": "Revision:2628415",
+                                    "class": "Revision",
+                                    "price": "",
+                                    "title": "What are the best action games on Steam?",
+                                    "images": {
+                                        "URL": null,
+                                        "type": "List",
+                                        "uuid": "ImageList@f6b3ebeb-8eff-5857-83bc-571b0b7c67ce",
+                                        "class": "ImageList",
+                                        "count": 0,
+                                        "children": [],
+                                        "localID": "rLGvzDhbImageList@f6b3ebeb-8eff-5857-83bc-571b0b7c67ce26"
+                                    },
+                                    "siteURL": "",
+                                    "localID": "rLGvzDhbRevision:262841525"
+                                },
+                                "auto_tags": {
+                                    "URL": null,
+                                    "type": "List",
+                                    "uuid": "TagList@49f85cad-f400-5d81-bc6a-9d20b3cbf38d",
+                                    "class": "TagList",
+                                    "count": 3,
+                                    "children": [{
+                                        "id": "game",
+                                        "name": "games",
+                                        "type": "Model",
+                                        "uuid": "Tag:game",
+                                        "class": "Tag",
+                                        "localID": "rLGvzDhbTag:game28"
+                                    }],
+                                    "localID": "rLGvzDhbTagList@49f85cad-f400-5d81-bc6a-9d20b3cbf38d27"
+                                },
+                                "compareURL": "/topics/6322/versus",
+                                "communityURL": "/topics/6322/~action-games-on-steam",
+                                "localID": "rLGvzDhb632220"
+                            },
+                            "localID": "rLGvzDhb6322-6314"
+                        },
+                        "localID": "rLGvzDhb6322-63-1111"
+                    },
+                    "localID": "rLGvzDhbEvent:8099359"
+                }
+            ],
+            "localID": "rLGvzDhb/topics/6322/viewpoints/63/activity8"
+        },
+        "sections": {
+            "proCount": 8,
+            "conCount": 3,
+            "type": "List",
+            "class": "SectionList",
+            "uuid": "SectionList@6322-63",
+            "children": [{
+                "id": 1,
+                "URL": "/topics/6322/viewpoints/63/sections/1/~",
+                "loc": [
+                    6322,
+                    63
+                ],
+                "type": "Model",
+                "uuid": "6322-63-1",
+                "class": "Section",
+                "isCon": false,
+                "revision": {
+                    "text": "This game always keeps you on your toes by having  enemies that can appear anywhere. Whether you've just turned a corner, climbed a ladder, or destroyed a wall with a cannon, there's no telling when and where the monsters will spring a chaotic ambush. This is accomplished through an overhead AI system that watches your path and pace through the level, placing enemies dynamically wherever you tread. As a result, replaying levels often leads to wildly different experiences, preventing the action from going stale for a long time.",
+                    "type": "Model",
+                    "uuid": "Revision:2212946",
+                    "class": "Revision",
+                    "price": "",
+                    "title": "Dynamic enemy placements to keep the action exciting",
+                    "images": {
+                        "URL": null,
+                        "type": "List",
+                        "uuid": "ImageList@6e96a30f-df81-5740-9751-6b193eacdf3e",
+                        "class": "ImageList",
+                        "count": 0,
+                        "children": [],
+                        "localID": "rLGvzDhbImageList@6e96a30f-df81-5740-9751-6b193eacdf3e34"
+                    },
+                    "siteURL": "",
+                    "localID": "rLGvzDhbRevision:221294633"
+                },
+                "isPending": false,
+                "contributors": {
+                    "type": "List",
+                    "class": "UserList",
+                    "uuid": "UserList@/topics/6322/viewpoints/63/sections/1",
+                    "children": [
+                        {
+                            "URL": "/users/KristapsFeldmanis",
+                            "bio": "",
+                            "type": "Model",
+                            "uuid": "User:8872a97a-9874-53a3-a97d-70eea3622579",
+                            "class": "User",
+                            "image": {
+                                "large": "https://ucarecdn.com/e44e4af9-4af5-46d5-b9f1-b87c0ebaf96b/?sz=200",
+                                "small": "https://ucarecdn.com/e44e4af9-4af5-46d5-b9f1-b87c0ebaf96b/?sz=50",
+                                "source": "https://ucarecdn.com/e44e4af9-4af5-46d5-b9f1-b87c0ebaf96b/?sz=200"
+                            },
+                            "created": "Sun, 16 Jul 2017 14:24:14 GMT",
+                            "username": "KristapsFeldmanis",
+                            "anonymous": false,
+                            "displayName": "Kristaps",
+                            "localID": "rLGvzDhbUser:8872a97a-9874-53a3-a97d-70eea362257936"
+                        },
+                        {
+                            "URL": "/users/JM80",
+                            "bio": " ",
+                            "type": "Model",
+                            "uuid": "User:d485d583-5f4a-5c31-9ad0-c1258b75df8f",
+                            "class": "User",
+                            "image": {
+                                "large": "https://ucarecdn.com/4a9a2744-c522-4ddf-9d03-01e5bb29c0ad/",
+                                "small": "https://ucarecdn.com/4a9a2744-c522-4ddf-9d03-01e5bb29c0ad/",
+                                "source": "https://ucarecdn.com/4a9a2744-c522-4ddf-9d03-01e5bb29c0ad/"
+                            },
+                            "created": "Fri, 26 Jan 2018 07:37:26 GMT",
+                            "username": "JM80",
+                            "anonymous": false,
+                            "displayName": "JM80",
+                            "localID": "rLGvzDhbUser:d485d583-5f4a-5c31-9ad0-c1258b75df8f37"
+                        }
+                    ],
+                    "count": 2,
+                    "localID": "rLGvzDhbUserList@/topics/6322/viewpoints/63/sections/135"
+                },
+                "events": {
+                    "type": "List",
+                    "class": "EventList",
+                    "uuid": "/topics/6322/viewpoints/63/sections/1/activity",
+                    "URL": "/topics/6322/viewpoints/63/sections/1/activity",
+                    "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/1/activity38"
+                },
+                "votes": {
+                    "type": "List",
+                    "class": "SectionVoteList",
+                    "uuid": "/topics/6322/viewpoints/63/sections/1/votes",
+                    "URL": "/topics/6322/viewpoints/63/sections/1/votes",
+                    "count": 3,
+                    "upvotes": 3,
+                    "downvotes": 0,
+                    "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/1/votes39"
+                },
+                "reactionSet": {
+                    "type": "Model",
+                    "class": "ReactionSet",
+                    "uuid": "/topics/6322/viewpoints/63/sections/1/react",
+                    "URL": "/topics/6322/viewpoints/63/sections/1/react",
+                    "upvote": {
+                        "type": "List",
+                        "class": "ReactionList",
+                        "uuid": "/topics/6322/viewpoints/63/sections/1/react/upvote",
+                        "URL": "/topics/6322/viewpoints/63/sections/1/react/upvote",
+                        "count": 3,
+                        "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/1/react/upvote41"
+                    },
+                    "downvote": {
+                        "type": "List",
+                        "class": "ReactionList",
+                        "uuid": "/topics/6322/viewpoints/63/sections/1/react/downvote",
+                        "URL": "/topics/6322/viewpoints/63/sections/1/react/downvote",
+                        "count": 0,
+                        "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/1/react/downvote42"
+                    },
+                    "useful": {
+                        "type": "List",
+                        "class": "ReactionList",
+                        "uuid": "/topics/6322/viewpoints/63/sections/1/react/useful",
+                        "URL": "/topics/6322/viewpoints/63/sections/1/react/useful",
+                        "count": 0,
+                        "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/1/react/useful43"
+                    },
+                    "flag": {
+                        "type": "List",
+                        "class": "ReactionList",
+                        "uuid": "/topics/6322/viewpoints/63/sections/1/react/flag",
+                        "URL": "/topics/6322/viewpoints/63/sections/1/react/flag",
+                        "count": 0,
+                        "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/1/react/flag44"
+                    },
+                    "needsImprovement": {
+                        "type": "List",
+                        "class": "ReactionList",
+                        "uuid": "/topics/6322/viewpoints/63/sections/1/react/needs-improvement",
+                        "URL": "/topics/6322/viewpoints/63/sections/1/react/needs-improvement",
+                        "count": 0,
+                        "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/1/react/needs-improvement45"
+                    },
+                    "outOfDate": {
+                        "type": "List",
+                        "class": "ReactionList",
+                        "uuid": "/topics/6322/viewpoints/63/sections/1/react/out-of-date",
+                        "URL": "/topics/6322/viewpoints/63/sections/1/react/out-of-date",
+                        "count": 0,
+                        "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/1/react/out-of-date46"
+                    },
+                    "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/1/react40"
+                },
+                "localID": "rLGvzDhb6322-63-132"
+            },
+            {
+                "id": 3,
+                "URL": "/topics/6322/viewpoints/63/sections/3/~",
+                "loc": [
+                    6322,
+                    63
+                ],
+                "type": "Model",
+                "uuid": "6322-63-3",
+                "class": "Section",
+                "isCon": true,
+                "revision": {
+                    "text": "Some of the passive abilities like a small bonus to dodge feel boring as they require no input from the player, there's no animation attached to it, and the effect in-game is negligible at best. ",
+                    "type": "Model",
+                    "uuid": "Revision:2144903",
+                    "class": "Revision",
+                    "price": "",
+                    "title": "Some of the passive skills are uninspired",
+                    "images": {
+                        "URL": null,
+                        "type": "List",
+                        "uuid": "ImageList@99e8b6f0-a9ac-5eb5-9155-d21d29e6a38b",
+                        "class": "ImageList",
+                        "count": 0,
+                        "children": [],
+                        "localID": "rLGvzDhbImageList@99e8b6f0-a9ac-5eb5-9155-d21d29e6a38b178"
+                    },
+                    "siteURL": "",
+                    "localID": "rLGvzDhbRevision:2144903177"
+                },
+                "isPending": false,
+                "contributors": {
+                    "type": "List",
+                    "class": "UserList",
+                    "uuid": "UserList@/topics/6322/viewpoints/63/sections/3",
+                    "children": [
+                        {
+                            "URL": "/users/JM80",
+                            "bio": " ",
+                            "type": "Model",
+                            "uuid": "User:d485d583-5f4a-5c31-9ad0-c1258b75df8f",
+                            "class": "User",
+                            "image": {
+                                "large": "https://ucarecdn.com/4a9a2744-c522-4ddf-9d03-01e5bb29c0ad/",
+                                "small": "https://ucarecdn.com/4a9a2744-c522-4ddf-9d03-01e5bb29c0ad/",
+                                "source": "https://ucarecdn.com/4a9a2744-c522-4ddf-9d03-01e5bb29c0ad/"
+                            },
+                            "created": "Fri, 26 Jan 2018 07:37:26 GMT",
+                            "username": "JM80",
+                            "anonymous": false,
+                            "displayName": "JM80",
+                            "localID": "rLGvzDhbUser:d485d583-5f4a-5c31-9ad0-c1258b75df8f180"
+                        }
+                    ],
+                    "count": 1,
+                    "localID": "rLGvzDhbUserList@/topics/6322/viewpoints/63/sections/3179"
+                },
+                "events": {
+                    "type": "List",
+                    "class": "EventList",
+                    "uuid": "/topics/6322/viewpoints/63/sections/3/activity",
+                    "URL": "/topics/6322/viewpoints/63/sections/3/activity",
+                    "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/3/activity181"
+                },
+                "votes": {
+                    "type": "List",
+                    "class": "SectionVoteList",
+                    "uuid": "/topics/6322/viewpoints/63/sections/3/votes",
+                    "URL": "/topics/6322/viewpoints/63/sections/3/votes",
+                    "count": 1,
+                    "upvotes": 1,
+                    "downvotes": 0,
+                    "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/3/votes182"
+                },
+                "reactionSet": {
+                    "type": "Model",
+                    "class": "ReactionSet",
+                    "uuid": "/topics/6322/viewpoints/63/sections/3/react",
+                    "URL": "/topics/6322/viewpoints/63/sections/3/react",
+                    "upvote": {
+                        "type": "List",
+                        "class": "ReactionList",
+                        "uuid": "/topics/6322/viewpoints/63/sections/3/react/upvote",
+                        "URL": "/topics/6322/viewpoints/63/sections/3/react/upvote",
+                        "count": 1,
+                        "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/3/react/upvote184"
+                    },
+                    "downvote": {
+                        "type": "List",
+                        "class": "ReactionList",
+                        "uuid": "/topics/6322/viewpoints/63/sections/3/react/downvote",
+                        "URL": "/topics/6322/viewpoints/63/sections/3/react/downvote",
+                        "count": 0,
+                        "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/3/react/downvote185"
+                    },
+                    "useful": {
+                        "type": "List",
+                        "class": "ReactionList",
+                        "uuid": "/topics/6322/viewpoints/63/sections/3/react/useful",
+                        "URL": "/topics/6322/viewpoints/63/sections/3/react/useful",
+                        "count": 0,
+                        "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/3/react/useful186"
+                    },
+                    "flag": {
+                        "type": "List",
+                        "class": "ReactionList",
+                        "uuid": "/topics/6322/viewpoints/63/sections/3/react/flag",
+                        "URL": "/topics/6322/viewpoints/63/sections/3/react/flag",
+                        "count": 0,
+                        "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/3/react/flag187"
+                    },
+                    "needsImprovement": {
+                        "type": "List",
+                        "class": "ReactionList",
+                        "uuid": "/topics/6322/viewpoints/63/sections/3/react/needs-improvement",
+                        "URL": "/topics/6322/viewpoints/63/sections/3/react/needs-improvement",
+                        "count": 0,
+                        "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/3/react/needs-improvement188"
+                    },
+                    "outOfDate": {
+                        "type": "List",
+                        "class": "ReactionList",
+                        "uuid": "/topics/6322/viewpoints/63/sections/3/react/out-of-date",
+                        "URL": "/topics/6322/viewpoints/63/sections/3/react/out-of-date",
+                        "count": 0,
+                        "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/3/react/out-of-date189"
+                    },
+                    "localID": "rLGvzDhb/topics/6322/viewpoints/63/sections/3/react183"
+                },
+                "localID": "rLGvzDhb6322-63-3176"
+            }],
+            "count": 11,
+            "localID": "rLGvzDhbSectionList@6322-6331"
+        },
+        "reactionSet": {
+            "type": "Model",
+            "class": "ReactionSet",
+            "uuid": "/topics/6322/viewpoints/63/react",
+            "URL": "/topics/6322/viewpoints/63/react",
+            "flag": {
+                "type": "List",
+                "class": "ReactionList",
+                "uuid": "/topics/6322/viewpoints/63/react/flag",
+                "URL": "/topics/6322/viewpoints/63/react/flag",
+                "count": 0,
+                "localID": "rLGvzDhb/topics/6322/viewpoints/63/react/flag191"
+            },
+            "outOfDate": {
+                "type": "List",
+                "class": "ReactionList",
+                "uuid": "/topics/6322/viewpoints/63/react/out-of-date",
+                "URL": "/topics/6322/viewpoints/63/react/out-of-date",
+                "count": 0,
+                "localID": "rLGvzDhb/topics/6322/viewpoints/63/react/out-of-date192"
+            },
+            "localID": "rLGvzDhb/topics/6322/viewpoints/63/react190"
+        },
+        "localID": "rLGvzDhb6322-632"
+    },
+    "specs": {
+        "type": "List",
+        "class": "SpecList",
+        "uuid": "SpecList@o-25907",
+        "children": [
+            {
+                "key": "Platforms",
+                "type": "Model",
+                "uuid": "Spec:Platforms@o-25907",
+                "class": "Spec",
+                "value": "Windows",
+                "localID": "rLGvzDhbSpec:Platforms@o-25907194"
+            },
+            {
+                "key": "Steam Rating",
+                "type": "Model",
+                "uuid": "Spec:Steam Rating@o-25907",
+                "class": "Spec",
+                "value": "Very Positive",
+                "localID": "rLGvzDhbSpec:Steam Rating@o-25907195"
+            },
+            {
+                "key": "Genre",
+                "type": "Model",
+                "uuid": "Spec:Genre@o-25907",
+                "class": "Spec",
+                "value": "First Person Action",
+                "localID": "rLGvzDhbSpec:Genre@o-25907196"
+            }
+        ],
+        "count": 3,
+        "localID": "rLGvzDhbSpecList@o-25907193"
+    },
+    "topics": {
+        "type": "List",
+        "class": "TopicList",
+        "uuid": "TopicList@o-25907",
+        "children": [
+            {
+                "id": 6674,
+                "URL": "/topics/6674/~warhammer-fantasy-games-on-steam",
+                "tags": {
+                    "URL": null,
+                    "type": "List",
+                    "uuid": "TagList@06b992f2-2157-555d-b5f1-5e0a4442a7d4",
+                    "class": "TagList",
+                    "count": 3,
+                    "children": [
+                        {
+                            "id": "gaming",
+                            "name": "Gaming",
+                            "type": "Model",
+                            "uuid": "Tag:gaming",
+                            "class": "Tag",
+                            "localID": "rLGvzDhbTag:gaming200"
+                        },
+                        {
+                            "id": "pc",
+                            "name": "PC",
+                            "type": "Model",
+                            "uuid": "Tag:pc",
+                            "class": "Tag",
+                            "localID": "rLGvzDhbTag:pc201"
+                        },
+                        {
+                            "id": "pc-games",
+                            "name": "PC Games",
+                            "type": "Model",
+                            "uuid": "Tag:pc-games",
+                            "class": "Tag",
+                            "localID": "rLGvzDhbTag:pc-games202"
+                        }
+                    ],
+                    "localID": "rLGvzDhbTagList@06b992f2-2157-555d-b5f1-5e0a4442a7d4199"
+                },
+                "type": "Model",
+                "uuid": "6674",
+                "class": "Topic",
+                "noindex": false,
+                "featured": null,
+                "revision": {
+                    "text": "",
+                    "type": "Model",
+                    "uuid": "Revision:695910",
+                    "class": "Revision",
+                    "price": "",
+                    "title": "What are the best Warhammer Fantasy games on Steam?",
+                    "images": {
+                        "URL": null,
+                        "type": "List",
+                        "uuid": "ImageList@9f2d9a5c-e89a-5b1e-86d9-02362437729e",
+                        "class": "ImageList",
+                        "count": 0,
+                        "children": [],
+                        "localID": "rLGvzDhbImageList@9f2d9a5c-e89a-5b1e-86d9-02362437729e204"
+                    },
+                    "siteURL": "",
+                    "localID": "rLGvzDhbRevision:695910203"
+                },
+                "auto_tags": {
+                    "URL": null,
+                    "type": "List",
+                    "uuid": "TagList@06b992f2-2157-555d-b5f1-5e0a4442a7d4",
+                    "class": "TagList",
+                    "count": 4,
+                    "children": [
+                        {
+                            "id": "game",
+                            "name": "games",
+                            "type": "Model",
+                            "uuid": "Tag:game",
+                            "class": "Tag",
+                            "localID": "rLGvzDhbTag:game206"
+                        },
+                        {
+                            "id": "steam",
+                            "name": "Steam",
+                            "type": "Model",
+                            "uuid": "Tag:steam",
+                            "class": "Tag",
+                            "localID": "rLGvzDhbTag:steam207"
+                        },
+                        {
+                            "id": "fantasy",
+                            "name": "fantasy",
+                            "type": "Model",
+                            "uuid": "Tag:fantasy",
+                            "class": "Tag",
+                            "localID": "rLGvzDhbTag:fantasy208"
+                        },
+                        {
+                            "id": "warhammer",
+                            "name": "Warhammer",
+                            "type": "Model",
+                            "uuid": "Tag:warhammer",
+                            "class": "Tag",
+                            "localID": "rLGvzDhbTag:warhammer209"
+                        }
+                    ],
+                    "localID": "rLGvzDhbTagList@06b992f2-2157-555d-b5f1-5e0a4442a7d4205"
+                },
+                "compareURL": "/topics/6674/versus",
+                "communityURL": "/topics/6674/~warhammer-fantasy-games-on-steam",
+                "optionsRecommendationCount": 10,
+                "ranking": 5,
+                "trending": false,
+                "aliasURL": "/topics/6674/viewpoints/5",
+                "aliasID": 5,
+                "localID": "rLGvzDhb6674198"
+            }
+        ],
+        "count": 10,
+        "localID": "rLGvzDhbTopicList@o-25907197"
+    },
+    "tags": {
+        "type": "List",
+        "class": "TagList",
+        "uuid": "TagList@o-25907",
+        "children": [
+            {
+                "id": "pc",
+                "name": "PC",
+                "type": "Model",
+                "uuid": "Tag:pc",
+                "class": "Tag",
+                "localID": "rLGvzDhbTag:pc315"
+            }
+        ],
+        "count": 29,
+        "localID": "rLGvzDhbTagList@o-25907314"
+    },
+    "votes": {
+        "type": "List",
+        "class": "MasterOptionVoteList",
+        "uuid": "MasterOptionVoteList@o-25907",
+        "upvotes": 7,
+        "downvotes": 0,
+        "localID": "rLGvzDhbMasterOptionVoteList@o-25907344"
+    },
+    "related": {
+        "type": "List",
+        "class": "MasterOptionList",
+        "uuid": "MasterOptionList@o-25907",
+        "children": [
+            {
+                "type": "Model",
+                "class": "MasterOption",
+                "id": 6361,
+                "uuid": "o-6361",
+                "URL": "/options/6361/~dark-souls-iii-review",
+                "compareURL": "/versus/25907/6361/~warhammer-vermintide-2_vs_dark-souls-iii",
+                "source": {
+                    "id": 15,
+                    "URL": "/topics/2353/viewpoints/15/~hack-and-slash-pc-games~dark-souls-iii",
+                    "type": "Model",
+                    "uuid": "2353-15",
+                    "class": "Viewpoint",
+                    "revision": {
+                        "text": "Dark Souls III is an action-RPG known for its difficult gameplay. You play as an Unkindled undead, trying to bring back the Lords of Cinder.",
+                        "type": "Model",
+                        "uuid": "Revision:3463413",
+                        "class": "Revision",
+                        "price": "$59.99",
+                        "title": "Dark Souls III",
+                        "images": {
+                            "URL": null,
+                            "type": "List",
+                            "uuid": "ImageList@1b01a180-3a70-530c-aa84-081c9aa70633",
+                            "class": "ImageList",
+                            "count": 5,
+                            "children": [
+                                {
+                                    "id": "b8f4ca6e5f4ecb23dfa4e140c5a7f01c",
+                                    "type": "Model",
+                                    "uuid": "Image:2018499",
+                                    "class": "Image",
+                                    "hosted": "https://ucarecdn.com/c0621453-5ca3-47bd-bb05-20e5918fcdd0/",
+                                    "source": "https://www.youtube.com/watch?v=_zDZYrIUgKE",
+                                    "localID": "rLGvzDhbImage:2018499350"
+                                },
+                                {
+                                    "id": "3eb945b214e95736d3e8642ef35fe3da",
+                                    "type": "Model",
+                                    "uuid": "Image:2018500",
+                                    "class": "Image",
+                                    "hosted": "https://ucarecdn.com/e8d670d4-044d-4325-bcd2-0593cfcb0b54/",
+                                    "source": "https://www.youtube.com/watch?v=p_8K71EUNbg",
+                                    "localID": "rLGvzDhbImage:2018500351"
+                                },
+                                {
+                                    "id": "727454f27f919405b6d4061d45b083df",
+                                    "type": "Model",
+                                    "uuid": "Image:2018501",
+                                    "class": "Image",
+                                    "hosted": "https://ucarecdn.com/6dd8b2a8-eb6d-48ee-bb75-7fd13f0fbeda/",
+                                    "source": "https://www.youtube.com/watch?v=2aTzAzkFZ4Y",
+                                    "localID": "rLGvzDhbImage:2018501352"
+                                },
+                                {
+                                    "id": "3f34fa4ba0b174c16c27a936aee19ddf",
+                                    "type": "Model",
+                                    "uuid": "Image:447297",
+                                    "class": "Image",
+                                    "hosted": "https://ucarecdn.com/808ff71b-6fb3-4ed8-b87e-d24d7c5855c1/",
+                                    "source": "https://steamcommunity.com/linkfilter/?url=http://cdn.akamai.steamstatic.com/steam/apps/374320/ss_1318a04ef11d87f38aebe6d47a96124f8f888ca8.1920x1080.jpg?t=1460428162",
+                                    "localID": "rLGvzDhbImage:447297353"
+                                },
+                                {
+                                    "id": "031f8e14af58f994ef0dc457ad7ecd23",
+                                    "type": "Model",
+                                    "uuid": "Image:447295",
+                                    "class": "Image",
+                                    "hosted": "https://ucarecdn.com/608bca24-ca1e-4bdd-b1ec-f3452e8179b4/",
+                                    "source": "https://steamcommunity.com/linkfilter/?url=http://cdn.akamai.steamstatic.com/steam/apps/374320/ss_5efd318b85a3917d1c6e717f4cb813b47547cd6f.1920x1080.jpg?t=1460428162",
+                                    "localID": "rLGvzDhbImage:447295354"
+                                }
+                            ],
+                            "localID": "rLGvzDhbImageList@1b01a180-3a70-530c-aa84-081c9aa70633349"
+                        },
+                        "siteURL": "https://www.humblebundle.com/store/dark-souls-iii?partner=slant",
+                        "localID": "rLGvzDhbRevision:3463413348"
+                    },
+                    "localID": "rLGvzDhb2353-15347"
+                },
+                "votes": {
+                    "type": "List",
+                    "class": "MasterOptionVoteList",
+                    "uuid": "MasterOptionVoteList@undefined",
+                    "upvotes": 166,
+                    "localID": "rLGvzDhbMasterOptionVoteList@undefined355"
+                },
+                "localID": "rLGvzDhbo-6361346"
+            }
+        ],
+        "count": 12,
+        "localID": "rLGvzDhbMasterOptionList@o-25907345"
+    },
+    "noindex": true,
+    "localID": "rLGvzDhbo-259071"
+}
+
+
+#######################
+# 🟠 SEARCH
+#######################
+
+'https://www.slant.co/search?filter={filterType}&query={query}&exclude_tags={tagIds}&format=json'
+
+curl 'https://www.slant.co/search?query=pc&format=json'
+curl 'https://www.slant.co/search?filter=questions&query=steam&format=json&analytics=page&exclude_tags=pc'
+
+- Displays 20 items
+- To get next page, use `properties.page.next`, which has format "/search?page=1&query=pc&format=json"
+- ?query=your%20query
+- ?filter=products
+- ?filter=questions
+-  What about ?exclude_tags?
+-  What about ?include_tags?
+
+Data:
+    {
+        URL: "/search?query=pc"
+        children: [
+
+        ]
+        class: "SearchList"
+        count: 1292
+        localID: "EzSEQsxq/search1"
+        parsed: "pc"
+        properties: {
+            page: {
+                next: "/search?page=1&query=pc"
+            }
+        }
+        search: "pc"
+        type: "List"
+        uuid: "/search"
+    }
+
+#######################
+# 🟠 FEED (FRONT PAGE)
+#######################
+
+'https://www.slant.co/feed?format=json&filter={filterType}&exclude_tags={tagIds}&include_tags={tagIds}'
+
+curl 'https://www.slant.co/feed?format=json&filter=top&exclude_tags=development,pc&include_tags=stream,xbox'
+
+- ?filter=recs
+- ?filter=feed (questions)
+- ?filter=top
+- ?filter=improve
+- ?exclude_tags=development,pc
+- ?include_tags=development,pc
+
+#############
+# ✅ TAGS
+#############
+
+curl 'https://www.slant.co/tags?format=json'
+
+#############
+# ❌ TAGS / TAG
+#############
+
+'https://www.slant.co/tags/{tagId}?format=json'
+
+curl 'https://www.slant.co/tags/pc?format=json'
+
+- Ignore because same as /topics?tags=myfavetag
